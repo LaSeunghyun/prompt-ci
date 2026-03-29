@@ -1,0 +1,33 @@
+# Prompt CI/CD Configuration
+# Copy to promptci.config.yaml and set your API keys as env vars.
+
+# Default provider when not specified in prompt files
+defaultProvider: openai
+defaultModel: gpt-4o-mini
+
+# Provider configurations
+# API keys are read from environment variables — NEVER put keys in this file
+providers:
+  openai:
+    apiKeyEnv: OPENAI_API_KEY
+    # baseUrl: https://api.openai.com  # Override for Azure OpenAI or proxies
+  anthropic:
+    apiKeyEnv: ANTHROPIC_API_KEY
+  ollama:
+    baseUrl: http://localhost:11434
+
+# LLM-as-judge configuration (for llm-judge assertions)
+judge:
+  provider: openai
+  model: gpt-4o
+
+# Eval runner settings
+concurrency: 5
+timeoutMs: 30000
+
+# SQLite history database location
+# storagePath: .promptci
+
+# Output reporters (used when --reporter is not specified)
+reporters:
+  - console

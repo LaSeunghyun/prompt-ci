@@ -1,0 +1,23 @@
+{
+  "name": "prompt-ci",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "promptci": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@prompt-ci/core": "*",
+    "commander": "^12.0.0",
+    "picocolors": "^1.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.0"
+  }
+}

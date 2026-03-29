@@ -1,0 +1,33 @@
+node_modules/
+dist/
+.turbo/
+
+# History database
+.promptci/
+*.db
+*.db-wal
+*.db-shm
+
+# Config with secrets
+promptci.config.yaml
+promptci.config.yml
+
+# Environment
+.env
+.env.*
+
+# Reports
+*.eval-report.html
+*.eval-report.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OMC state
+.omc/

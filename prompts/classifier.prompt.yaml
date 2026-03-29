@@ -1,0 +1,53 @@
+name: sentiment-classifier
+description: Classify text sentiment as positive, negative, or neutral
+model: gpt-4o-mini
+temperature: 0
+
+system: |
+  You are a sentiment classifier. Respond with ONLY one word:
+  "positive", "negative", or "neutral". No explanation.
+
+template: |
+  Classify the sentiment of this text:
+  "{{text}}"
+
+variables:
+  text:
+    required: true
+
+tests:
+  - name: positive-sentiment
+    vars:
+      text: "I absolutely love this product! Best purchase I've ever made."
+    assertions:
+      - type: contains
+        value: positive
+      - type: max-tokens
+        value: 10
+      - type: cost-limit
+        value: 0.001
+
+  - name: negative-sentiment
+    vars:
+      text: "Terrible experience. The service was awful and the food was cold."
+    assertions:
+      - type: contains
+        value: negative
+      - type: max-tokens
+        value: 10
+
+  - name: neutral-sentiment
+    vars:
+      text: "The meeting is scheduled for 3pm tomorrow in conference room B."
+    assertions:
+      - type: contains
+        value: neutral
+      - type: max-tokens
+        value: 10
+
+  - name: response-is-single-word
+    vars:
+      text: "This is an okay product, nothing special."
+    assertions:
+      - type: regex
+        value: "^(positive|negative|neutral)$"

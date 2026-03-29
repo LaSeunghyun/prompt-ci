@@ -1,0 +1,59 @@
+name: summarize-article
+description: Summarize an article in a given style
+model: gpt-4o-mini
+temperature: 0.3
+maxTokens: 500
+
+system: |
+  You are a concise summarizer. Always produce clear, well-structured summaries.
+  Never add information not present in the original article.
+
+template: |
+  Summarize the following article in {{style}} style:
+
+  {{article}}
+
+variables:
+  style:
+    default: bullet-points
+  article:
+    required: true
+
+tests:
+  - name: bullet-points-basic
+    vars:
+      style: bullet-points
+      article: |
+        Artificial intelligence is transforming healthcare in remarkable ways.
+        Machine learning algorithms can now detect diseases from medical images
+        with accuracy rivaling human doctors. Natural language processing helps
+        extract insights from millions of research papers. Predictive models
+        identify patients at risk before symptoms appear. However, challenges
+        remain around data privacy, algorithmic bias, and the need for human
+        oversight in critical medical decisions.
+    assertions:
+      - type: contains
+        value: AI
+      - type: contains
+        value: healthcare
+      - type: max-tokens
+        value: 300
+      - type: cost-limit
+        value: 0.01
+
+  - name: paragraph-style
+    vars:
+      style: paragraph
+      article: |
+        The global shift to remote work has permanently altered office dynamics.
+        Companies report 20% higher productivity for remote workers, but also
+        note challenges in team cohesion and onboarding. Hybrid models are
+        emerging as the preferred solution, with 3 days in-office becoming
+        the most common configuration.
+    assertions:
+      - type: not-contains
+        value: "bullet"
+      - type: regex
+        value: "[.!?]$"
+      - type: max-tokens
+        value: 250

@@ -1,0 +1,60 @@
+name: json-extractor
+description: Extract structured data from text as JSON
+model: gpt-4o-mini
+temperature: 0
+
+system: |
+  You are a data extraction assistant. Extract the requested information
+  and return it as valid JSON. Only output JSON, no markdown fences.
+
+template: |
+  Extract the following fields from the text below:
+  - name (string)
+  - email (string)
+  - company (string)
+
+  Text: "{{text}}"
+
+variables:
+  text:
+    required: true
+
+tests:
+  - name: basic-extraction
+    vars:
+      text: "Hi, I'm John Smith from Acme Corp. Reach me at john@acme.com"
+    assertions:
+      - type: is-json
+        value: true
+      - type: json-schema
+        value:
+          type: object
+          required:
+            - name
+            - email
+            - company
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              pattern: "@"
+            company:
+              type: string
+      - type: contains
+        value: "John Smith"
+      - type: contains
+        value: "john@acme.com"
+      - type: cost-limit
+        value: 0.005
+
+  - name: partial-info
+    vars:
+      text: "Contact Sarah at sarah.jones@example.org for details"
+    assertions:
+      - type: is-json
+        value: true
+      - type: contains
+        value: "Sarah"
+      - type: contains
+        value: "sarah.jones@example.org"
